@@ -87,9 +87,9 @@ def main():
         print(f"모델 원래 라벨: {raw_label}")
         print(f"최종 판단(2단계): {final_label} (확신도: {score:.4f})")
         print("-" * 40)
-
 if __name__ == "__main__":
     main()
+
 
 ## 🔍 라벨 설명
 

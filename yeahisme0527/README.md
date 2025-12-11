@@ -1,18 +1,124 @@
-# 황예은의 오픈소스 프로젝트 파일입니다.
+# 황예은의 오픈소스 프로젝트 - 한국어 감정 분석 프로그램
+
+-----------------------------------------------------------
+
+## 📌 프로젝트 개요
+
+이 프로젝트는 한국어 문장을 입력하면 긍정/부정 감정을 분석하는 파이썬 프로그램입니다.
+HuggingFace의 한국어 BERT 모델을 활용하여 문장의 감정을 예측합니다.
+
+- 사용 모델: **WhitePeak/bert-base-cased-Korean-sentiment**
+- 입력: 한국어 문장 1개
+- 출력: 부정 / 긍정 (2단계 감정 결과 + 확신도)
+
+-----------------------------------------------------------
+
+## 📌 데모 예시
+아래는 실제 프로그램 실행 캡처입니다.
+
+![Demo](demo.png)
+=== YehEun's Korean Sentiment Program ===
+Device set to use cpu
+✅ 모델 로딩 완료! 이제 문장을 입력해 보세요.
 
 
-## 📌 프로젝트 소개
-사용자의 이름을 입력받아 맞춤 인사 메시지를 출력하는 간단한 Python 프로그램입니다.  
-`greet(name)` 함수를 통해 이름을 인자로 받아 환영 문구를 생성합니다.
+문장을 입력하세요 (종료: exit): 오늘 너무 힘들고 지치는 하루였다
+모델 원래 라벨: LABEL_0
+최종 판단(2단계): 부정 😡 (확신도: 0.9954)
 
-## 🛠 주요 기능
-- 이름을 입력받아 환영 인사 생성
-- 함수 형태로 구현되어 다른 코드에서 재사용 가능
+----------------------------------------
+문장을 입력하세요 (종료: exit): 이번 주는 정말 즐겁고 만족스러운 일들만 가득했다
+모델 원래 라벨: LABEL_1
+최종 판단(2단계): 긍정 🙂 (확신도: 0.9574)
 
-## 🚀 실행 방법
-1. Python 3이 설치된 환경에서 터미널 또는 명령 프롬프트를 엽니다.
-2. 이 폴더(`yeahisme0527`)로 이동합니다.
-3. 아래 명령을 실행합니다.
+--------------------------------------------------------------
 
-```bash
+## 📌 실행 방법
+
+### 1) 일반적인 실행 방법
+
+1. 필요한 패키지 설치
+pip install transformers torch
+
+2. 프로젝트 폴더(yeahisme0527)로 이동
+cd yeahisme0527
+
+3. 프로그램 실행
 python main.py
+
+(+ 내컴퓨터에서는 사용한 경로)
+cd "C:\Users\Hwang\Downloads\opensource-term-project-team45-main\opensource-term-project-team45-main\yeahisme0527"
+python main.py
+
+---------------------------------------------------------------
+
+## 📌 코드 동작 설명
+
+메인 코드 구조(요약):
+from transformers import pipeline
+
+def main():
+    print("=== YehEun's Korean Sentiment Program ===")
+
+    # 한국어 감정 분석 모델 로드
+    classifier = pipeline(
+        "sentiment-analysis",
+        model="WhitePeak/bert-base-cased-Korean-sentiment"
+    )
+
+    print("✅ 모델 로딩 완료! 이제 문장을 입력해 보세요.\n")
+
+    while True:
+        text = input("문장을 입력하세요 (종료: exit): ")
+        if text.lower() == "exit":
+            print("프로그램을 종료합니다.")
+            break
+
+        result = classifier(text)[0]
+        raw_label = result["label"]   # LABEL_0 / LABEL_1 / LABEL_2
+        score = result["score"]
+
+        # LABEL_0: 부정, LABEL_1 & LABEL_2: 긍정 으로 2단계 감정으로 변환
+        if raw_label == "LABEL_0":
+            final_label = "부정 😡"
+        else:
+            final_label = "긍정 🙂"
+
+        print(f"모델 원래 라벨: {raw_label}")
+        print(f"최종 판단(2단계): {final_label} (확신도: {score:.4f})")
+        print("-" * 40)
+
+if __name__ == "__main__":
+    main()
+
+## 🔍 라벨 설명
+
+모델 기본 라벨
+
+- LABEL_0 → 부정(negative)
+- LABEL_1 → 중립(neutral)
+- LABEL_2 → 긍정(positive)
+
+이 프로젝트에서의 최종 표현
+
+- LABEL_0 → 부정 😡
+- LABEL_1, LABEL_2 → 긍정 🙂
+→ 즉, 3단계 감정(부정/중립/긍정)을 2단계(부정/긍정)로 단순화하여 출력
+
+---------------------------------------------------------------
+
+## 📌 사용 모델 
+
+모델 이름: WhitePeak/bert-base-cased-Korean-sentiment
+
+특징: 한국어 문장을 대상으로 학습된 BERT 기반 감정 분석 모델
+
+HuggingFace 링크:
+https://huggingface.co/WhitePeak/bert-base-cased-Korean-sentiment
+
+--------------------------------------------------------------
+
+## 📌 참고 자료
+
+HuggingFace Transformers 공식 문서
+https://huggingface.co/docs/transformers/index

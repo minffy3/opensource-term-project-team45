@@ -1,20 +1,22 @@
 from transformers import pipeline
 
 def main():
-    print("=== YehEun's Sentiment Analysis Program ===")
-    
-    # 허깅페이스 감정 분석 모델 로드
-    classifier = pipeline("sentiment-analysis")
+    print("=== YehEun's Korean Sentiment Program ===")
+
+    # 한국어 전용 감정 분석 모델 (교안 예시와 동일 계열)
+    classifier = pipeline(
+        "sentiment-analysis",
+        model="WhitePeak/bert-base-cased-Korean-sentiment"
+    )
 
     while True:
         text = input("문장을 입력하세요 (종료: exit): ")
-
         if text.lower() == "exit":
             print("프로그램을 종료합니다.")
             break
 
         result = classifier(text)[0]
-        label = result['label']
+        label = result['label']    # LABEL_0 / LABEL_1 / LABEL_2
         score = result['score']
 
         print(f"결과: {label} (확신도: {score:.4f})")
@@ -22,3 +24,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

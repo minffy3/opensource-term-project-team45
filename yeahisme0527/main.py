@@ -3,6 +3,7 @@ from transformers import pipeline
 def main():
     print("=== YehEun's Korean Sentiment Program ===")
 
+    # 한국어 전용 감정 분석 모델
     classifier = pipeline(
         "sentiment-analysis",
         model="WhitePeak/bert-base-cased-Korean-sentiment"
@@ -17,19 +18,18 @@ def main():
             break
 
         result = classifier(text)[0]
-        label_id = result['label']    # LABEL_0 / LABEL_1 / LABEL_2
-        score = result['score']
+        raw_label = result["label"]   # LABEL_0 / LABEL_1 / LABEL_2
+        score = result["score"]
 
-        label_map = {
-            "LABEL_0": "부정 😡",
-            "LABEL_1": "중립 😐",
-            "LABEL_2": "긍정 🙂",
-        }
-        pretty_label = label_map.get(label_id, label_id)
+        # 🔻 여기서 3단계를 2단계(부정/긍정)로 강제 변환
+        if raw_label == "LABEL_0":
+            final_label = "부정 😡"
+        else:  # LABEL_1, LABEL_2 모두 긍정으로 처리
+            final_label = "긍정 🙂"
 
-        print(f"결과: {pretty_label} (확신도: {score:.4f})")
+        print(f"모델 원래 라벨: {raw_label}")
+        print(f"최종 판단(2단계): {final_label} (확신도: {score:.4f})")
         print("-" * 40)
 
 if __name__ == "__main__":
     main()
-

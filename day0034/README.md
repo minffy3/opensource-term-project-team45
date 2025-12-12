@@ -28,7 +28,7 @@
 ## ▷ 코드 동작
 
 ```md
-```python
+
 from transformers import pipeline
 
 def main():
@@ -63,6 +63,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+'''
 
 ---
 ## ▷ 실행방법

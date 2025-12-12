@@ -22,7 +22,7 @@
 
 ---
 ## ▷ 데모 이미지
-<img src="demo.png" width="400">
+<img src="demo.png" width="500">
 
 ---
 ## ▷ 코드 동작

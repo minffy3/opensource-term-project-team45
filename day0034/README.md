@@ -32,6 +32,7 @@ from transformers import pipeline
 
 def main():
     model_name = "smilegate-ai/kor_unsmile"
+
     print(f"[INFO] 모델 로딩 중... ({model_name})")
     classifier = pipeline("text-classification", model=model_name)
     print("[INFO] 모델 로딩 완료!\n")
